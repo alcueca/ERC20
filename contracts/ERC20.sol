@@ -39,7 +39,7 @@ contract ERC20 {
     }
 
     function transfer(address dst, uint wad) external returns (bool) {
-        return transferFrom(msg.sender, dst, wad);
+        return _transfer(msg.sender, dst, wad);
     }
 
     function transferFrom(address src, address dst, uint wad) public returns (bool) {
@@ -49,6 +49,10 @@ contract ERC20 {
             _approve(src, msg.sender, allowed - wad);
         }
 
+        return _transfer(src, dst, wad);
+    }
+
+    function _transfer(address src, address dst, uint wad) public returns (bool) {
         require(_balanceOf[src] >= wad, "ERC20: insufficient-balance");
         _balanceOf[src] = _balanceOf[src] - wad;
         _balanceOf[dst] = _balanceOf[dst] + wad;
