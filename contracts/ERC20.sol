@@ -45,7 +45,7 @@ contract ERC20 {
     function transferFrom(address src, address dst, uint wad) public virtual returns (bool) {
         uint256 allowed = _allowance[src][msg.sender];
         if (src != msg.sender && allowed != type(uint).max) {
-            require(allowed >= wad, "ERC20: insufficient-approval");
+            require(allowed >= wad, "ERC20: Insufficient approval");
             _approve(src, msg.sender, allowed - wad);
         }
 
@@ -53,7 +53,7 @@ contract ERC20 {
     }
 
     function _transfer(address src, address dst, uint wad) internal virtual returns (bool) {
-        require(_balanceOf[src] >= wad, "ERC20: insufficient-balance");
+        require(_balanceOf[src] >= wad, "ERC20: Insufficient balance");
         _balanceOf[src] = _balanceOf[src] - wad;
         _balanceOf[dst] = _balanceOf[dst] + wad;
 
@@ -75,13 +75,7 @@ contract ERC20 {
     }
 
     function _burn(address src, uint wad) internal virtual {
-        uint256 allowed = _allowance[src][msg.sender];
-        if (src != msg.sender && allowed != type(uint).max) {
-            require(allowed >= wad, "ERC20: insufficient-approval");
-            _approve(src, msg.sender, allowed - wad);
-        }
-
-        require(_balanceOf[src] >= wad, "ERC20: insufficient-balance");
+        require(_balanceOf[src] >= wad, "ERC20: Insufficient balance");
         _balanceOf[src] = _balanceOf[src] - wad;
         _totalSupply = _totalSupply - wad;
         emit Burn(src, wad);
