@@ -22,27 +22,27 @@ contract ERC20 {
     event Mint(address indexed dst, uint wad);
     event Burn(address indexed src, uint wad);
 
-    function totalSupply() public view returns (uint256) {
+    function totalSupply() external view virtual returns (uint256) {
         return _totalSupply;
     }
 
-    function balanceOf(address guy) public view returns (uint256) {
+    function balanceOf(address guy) external view virtual returns (uint256) {
         return _balanceOf[guy];
     }
 
-    function allowance(address owner, address spender) public view returns (uint256) {
+    function allowance(address owner, address spender) external view virtual returns (uint256) {
         return _allowance[owner][spender];
     }
 
-    function approve(address spender, uint wad) public returns (bool) {
+    function approve(address spender, uint wad) external virtual returns (bool) {
         return _approve(msg.sender, spender, wad);
     }
 
-    function transfer(address dst, uint wad) external returns (bool) {
+    function transfer(address dst, uint wad) external virtual returns (bool) {
         return _transfer(msg.sender, dst, wad);
     }
 
-    function transferFrom(address src, address dst, uint wad) public returns (bool) {
+    function transferFrom(address src, address dst, uint wad) external virtual returns (bool) {
         uint256 allowed = _allowance[src][msg.sender];
         if (src != msg.sender && allowed != type(uint).max) {
             require(allowed >= wad, "ERC20: insufficient-approval");
@@ -52,7 +52,7 @@ contract ERC20 {
         return _transfer(src, dst, wad);
     }
 
-    function _transfer(address src, address dst, uint wad) public returns (bool) {
+    function _transfer(address src, address dst, uint wad) internal virtual returns (bool) {
         require(_balanceOf[src] >= wad, "ERC20: insufficient-balance");
         _balanceOf[src] = _balanceOf[src] - wad;
         _balanceOf[dst] = _balanceOf[dst] + wad;
@@ -62,19 +62,19 @@ contract ERC20 {
         return true;
     }
 
-    function _approve(address owner, address spender, uint wad) internal returns (bool) {
+    function _approve(address owner, address spender, uint wad) internal virtual returns (bool) {
         _allowance[owner][spender] = wad;
         emit Approval(owner, spender, wad);
         return true;
     }
 
-    function _mint(address dst, uint wad) internal {
+    function _mint(address dst, uint wad) internal virtual {
         _balanceOf[dst] = _balanceOf[dst] + wad;
         _totalSupply = _totalSupply + wad;
         emit Mint(dst, wad);
     }
 
-    function _burn(address src, uint wad) internal {
+    function _burn(address src, uint wad) internal virtual {
         uint256 allowed = _allowance[src][msg.sender];
         if (src != msg.sender && allowed != type(uint).max) {
             require(allowed >= wad, "ERC20: insufficient-approval");
