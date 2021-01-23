@@ -22,27 +22,27 @@ contract ERC20 {
     event Mint(address indexed dst, uint wad);
     event Burn(address indexed src, uint wad);
 
-    function totalSupply() external view virtual returns (uint256) {
+    function totalSupply() public view virtual returns (uint256) {
         return _totalSupply;
     }
 
-    function balanceOf(address guy) external view virtual returns (uint256) {
+    function balanceOf(address guy) public view virtual returns (uint256) {
         return _balanceOf[guy];
     }
 
-    function allowance(address owner, address spender) external view virtual returns (uint256) {
+    function allowance(address owner, address spender) public view virtual returns (uint256) {
         return _allowance[owner][spender];
     }
 
-    function approve(address spender, uint wad) external virtual returns (bool) {
+    function approve(address spender, uint wad) public virtual returns (bool) {
         return _approve(msg.sender, spender, wad);
     }
 
-    function transfer(address dst, uint wad) external virtual returns (bool) {
+    function transfer(address dst, uint wad) public virtual returns (bool) {
         return _transfer(msg.sender, dst, wad);
     }
 
-    function transferFrom(address src, address dst, uint wad) external virtual returns (bool) {
+    function transferFrom(address src, address dst, uint wad) public virtual returns (bool) {
         uint256 allowed = _allowance[src][msg.sender];
         if (src != msg.sender && allowed != type(uint).max) {
             require(allowed >= wad, "ERC20: insufficient-approval");
