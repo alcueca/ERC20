@@ -19,8 +19,6 @@ contract ERC20 {
 
     event Approval(address indexed owner, address indexed spender, uint wad);
     event Transfer(address indexed src, address indexed dst, uint wad);
-    event Mint(address indexed dst, uint wad);
-    event Burn(address indexed src, uint wad);
 
     function totalSupply() public view virtual returns (uint256) {
         return _totalSupply;
@@ -71,13 +69,13 @@ contract ERC20 {
     function _mint(address dst, uint wad) internal virtual {
         _balanceOf[dst] = _balanceOf[dst] + wad;
         _totalSupply = _totalSupply + wad;
-        emit Mint(dst, wad);
+        emit Transfer(address(0), dst, wad);
     }
 
     function _burn(address src, uint wad) internal virtual {
         require(_balanceOf[src] >= wad, "ERC20: Insufficient balance");
         _balanceOf[src] = _balanceOf[src] - wad;
         _totalSupply = _totalSupply - wad;
-        emit Burn(src, wad);
+        emit Transfer(src, address(0), wad);
     }
 }
